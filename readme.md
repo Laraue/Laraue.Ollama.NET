@@ -2,6 +2,9 @@
 
 A typed .NET adapter over the native [Ollama](https://ollama.com) HTTP API. It generates the JSON Schema used for structured output automatically from your C# class via reflection, so you don't have to hand-write and maintain the `format` schema for every response type.
 
+[![latest version](https://img.shields.io/nuget/v/Laraue.Ollama.NET)](https://www.nuget.org/packages/Laraue.Ollama.NET)
+[![latest version](https://img.shields.io/nuget/dt/Laraue.Ollama.NET)](https://www.nuget.org/packages/Laraue.Ollama.NET)
+
 Ollama runs a local HTTP service (port `11434` by default) that exposes open-source language and vision models — no cloud API keys, no per-call cost, no data leaving your server. This is useful when:
 
 - you're processing personal data and can't send it to an external provider
