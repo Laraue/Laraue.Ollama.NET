@@ -2,6 +2,7 @@
 
 namespace Laraue.Ollama.NET.IntegrationTests;
 
+[Trait("Category", "IntegrationTest")]
 public class PredictorTests
 {
     [Fact]
