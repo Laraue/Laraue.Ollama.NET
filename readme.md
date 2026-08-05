@@ -161,4 +161,4 @@ Ollama works well in production for latency-tolerant, GPU-bound workloads where 
 
 The [real estate aggregator](https://github.com/win7user10/Laraue.Apps.RealEstate/blob/main/src/Laraue.Apps.RealEstate.Prediction.AppServices/OllamaRealEstatePredictor.cs) uses `IOllamaPredictor` with `qwen2.5vl` to score apartment photos for renovation quality — every listing photo gets a `RenovationRating` between 0 and 1 plus tag arrays (`Advantages`, `Problems`) that feed into the final listing ranking.
 
-See the full write-up: [Using Ollama in C# and .NET](https://laraue.com/blog/ollama-dotnet) for more background on the native HTTP API and why this adapter exists.
+See the full write-up: [Using Ollama in C# and .NET](https://laraue.com/blog/articles/ollama-dotnet) for more background on the native HTTP API and why this adapter exists.
