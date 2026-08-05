@@ -1,0 +1,27 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laraue.Ollama.NET", "src\Laraue.Ollama.NET\Laraue.Ollama.NET.csproj", "{10D5653D-F4DD-4967-B914-CE329F929B53}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{369C3AA5-0B1F-4F1C-9D28-CB8A4F35BFB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Laraue.Ollama.NET.IntegrationTests", "tests\Laraue.Ollama.NET.IntegrationTests\Laraue.Ollama.NET.IntegrationTests.csproj", "{C5546808-8881-4557-BFC1-CD18E941952C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10D5653D-F4DD-4967-B914-CE329F929B53}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10D5653D-F4DD-4967-B914-CE329F929B53}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10D5653D-F4DD-4967-B914-CE329F929B53}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10D5653D-F4DD-4967-B914-CE329F929B53}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5546808-8881-4557-BFC1-CD18E941952C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5546808-8881-4557-BFC1-CD18E941952C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5546808-8881-4557-BFC1-CD18E941952C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5546808-8881-4557-BFC1-CD18E941952C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C5546808-8881-4557-BFC1-CD18E941952C} = {369C3AA5-0B1F-4F1C-9D28-CB8A4F35BFB1}
+	EndGlobalSection
+EndGlobal
