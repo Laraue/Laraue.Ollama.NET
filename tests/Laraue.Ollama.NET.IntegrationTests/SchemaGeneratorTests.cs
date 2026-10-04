@@ -1,12 +1,19 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Laraue.Ollama.NET.Schema;
 
 namespace Laraue.Ollama.NET.IntegrationTests;
 
 public class SchemaGeneratorTests
 {
+    private static readonly JsonSerializerOptions Options = new()
+    {
+        Converters = { new JsonStringEnumConverter(JsonNamingPolicy.CamelCase) },
+        DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+    };
+
     private static JsonElement Generate(Type type)
-        => JsonSerializer.SerializeToElement(SchemaGenerator.GetSchema(type), type: typeof(OllamaSchemaProperty));
+        => JsonSerializer.SerializeToElement(SchemaGenerator.GetSchema(type), typeof(OllamaSchemaProperty), Options);
 
     [Fact]
     public void ObjectSchema_ContainsRequiredList()
@@ -31,7 +38,7 @@ public class SchemaGeneratorTests
     {
         var schema = Generate(typeof(RatingDto)).GetProperty("properties").GetProperty("Kind");
 
-        Assert.Equal("string", schema.GetProperty("type")[0].GetString()!.ToLowerInvariant());
+        Assert.Equal("string", schema.GetProperty("type")[0].GetString());
         Assert.Equal(["Flat", "House"], schema.GetProperty("enum").EnumerateArray().Select(x => x.GetString()).ToArray());
     }
 
