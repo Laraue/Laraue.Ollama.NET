@@ -8,4 +8,7 @@ public class OllamaSchemaProperty
 {
     [JsonPropertyName("type")]
     public required SchemaPropertyType[] Type { get; init; }
+
+    [JsonPropertyName("enum")]
+    public string[]? Enum { get; init; }
 }
