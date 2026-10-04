@@ -1,0 +1,20 @@
+name: Pull request checks
+on:
+  pull_request:
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET environment
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.x.x'
+
+      - name: Build project
+        run: dotnet build --configuration Release
+
+      - name: Run unit tests
+        run: dotnet test --configuration Release --no-build --filter 'Category!=IntegrationTest'

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json.Serialization;
 
 namespace Laraue.Ollama.NET.Schema;
@@ -9,6 +10,15 @@ public static class SchemaGenerator
 {
     public static OllamaSchemaProperty GetSchema(Type outputType)
     {
+        if (outputType.IsEnum)
+        {
+            return new OllamaSchemaProperty
+            {
+                Type = [SchemaPropertyType.String],
+                Enum = Enum.GetNames(outputType),
+            };
+        }
+
         var propertyType = GetOllamaType(outputType);
 
         return propertyType switch
@@ -35,6 +45,7 @@ public static class SchemaGenerator
         return new OllamaSchemaObjectProperty
         {
             Properties = resultProperties,
+            Required = resultProperties.Keys.ToArray(),
             Type = [SchemaPropertyType.Object]
         };
     }
@@ -55,6 +66,7 @@ public static class SchemaGenerator
                     {
                         Type = [elementType],
                         Properties = schema.Properties,
+                        Required = schema.Required,
                     },
                     Type = [SchemaPropertyType.Array]
                 };
@@ -82,6 +94,11 @@ public static class SchemaGenerator
     
     private static SchemaPropertyType GetOllamaType(Type type)
     {
+        if (type.IsEnum)
+        {
+            return SchemaPropertyType.String;
+        }
+
         if (type == typeof(string))
         {
             return SchemaPropertyType.String;
@@ -124,6 +141,9 @@ public static class SchemaGenerator
     {
         [JsonPropertyName("properties")]
         public required Dictionary<string, OllamaSchemaProperty> Properties { get; init; }
+
+        [JsonPropertyName("required")]
+        public required string[] Required { get; init; }
     }
     
     public class OllamaSchemaArrayProperty : OllamaSchemaProperty
@@ -144,5 +164,8 @@ public static class SchemaGenerator
         
         [JsonPropertyName("properties")]
         public Dictionary<string, OllamaSchemaProperty>? Properties { get; init; }
+
+        [JsonPropertyName("required")]
+        public string[]? Required { get; init; }
     }
 }

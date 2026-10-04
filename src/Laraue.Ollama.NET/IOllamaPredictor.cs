@@ -14,7 +14,7 @@ public interface IOllamaPredictor
     /// Requires a model that supports image processing.
     /// </summary>
     public Task<TModel> PredictAsync<TModel>(
-        string modelName,
+        string model,
         string prompt,
         string base64EncodedImage,
         Dictionary<string, object>? additionalParameters = null,
@@ -25,7 +25,7 @@ public interface IOllamaPredictor
     /// Run prediction with the <see cref="TModel"/> response schema.
     /// </summary>
     public Task<TModel> PredictAsync<TModel>(
-        string modelName,
+        string model,
         string prompt,
         Dictionary<string, object>? additionalParameters = null,
         CancellationToken ct = default)
@@ -35,7 +35,7 @@ public interface IOllamaPredictor
     /// Run prediction and return response string.
     /// </summary>
     public Task<string> PredictAsync(
-        string modelName,
+        string model,
         string prompt,
         Dictionary<string, object>? additionalParameters = null,
         CancellationToken ct = default);

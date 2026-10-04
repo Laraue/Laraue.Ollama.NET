@@ -50,12 +50,12 @@ public class OllamaPredictor(HttpClient client, ILogger<OllamaPredictor> logger)
 
     /// <inheritdoc />
     public Task<string> PredictAsync(
-        string modelName,
+        string model,
         string prompt,
         Dictionary<string, object>? additionalParameters = null,
         CancellationToken ct = default)
     {
-        return RequestOllamaAsync(modelName, prompt, null, null, additionalParameters, ct);
+        return RequestOllamaAsync(model, prompt, null, null, additionalParameters, ct);
     }
 
     private async Task<TModel> PredictInternalAsync<TModel>(
@@ -92,7 +92,7 @@ public class OllamaPredictor(HttpClient client, ILogger<OllamaPredictor> logger)
 
         try
         {
-            return JsonSerializer.Deserialize<TModel>(stringResponse, new JsonSerializerOptions(JsonSerializerDefaults.General))!;
+            return JsonSerializer.Deserialize<TModel>(stringResponse, new JsonSerializerOptions(JsonSerializerDefaults.General) { Converters = { new JsonStringEnumConverter() } })!;
         }
         catch (Exception e)
         {
@@ -110,7 +110,6 @@ public class OllamaPredictor(HttpClient client, ILogger<OllamaPredictor> logger)
     {
         var request = new Dictionary<string, object>
         {
-            ["temperature"] = 0,
             ["model"] = model,
             ["prompt"] = prompt,
             ["stream"] = false,
@@ -120,9 +119,29 @@ public class OllamaPredictor(HttpClient client, ILogger<OllamaPredictor> logger)
         if (base64EncodedImage is not null)
             request["images"] = new[] { base64EncodedImage };
 
+        var options = new Dictionary<string, object> { ["temperature"] = 0 };
+
         if (additionalParameters != null)
+        {
             foreach (var additionalParameter in additionalParameters)
-                request.Add(additionalParameter.Key, additionalParameter.Value);
+            {
+                switch (additionalParameter.Key)
+                {
+                    case "options":
+                        foreach (var option in ToDictionary(additionalParameter.Value))
+                            options[option.Key] = option.Value;
+                        break;
+                    case "temperature":
+                        options["temperature"] = additionalParameter.Value;
+                        break;
+                    default:
+                        request[additionalParameter.Key] = additionalParameter.Value;
+                        break;
+                }
+            }
+        }
+
+        request["options"] = options;
         
         var requestJson = JsonSerializer.Serialize(request, _options);
         using var content = new StringContent(requestJson, Encoding.UTF8, "application/json");
@@ -151,6 +170,19 @@ public class OllamaPredictor(HttpClient client, ILogger<OllamaPredictor> logger)
         }
     }
     
+    private Dictionary<string, object> ToDictionary(object value)
+    {
+        var element = JsonSerializer.SerializeToElement(value, _options);
+        if (element.ValueKind != JsonValueKind.Object)
+            throw new ArgumentException("The 'options' parameter must be an object", nameof(value));
+
+        var result = new Dictionary<string, object>();
+        foreach (var property in element.EnumerateObject())
+            result[property.Name] = property.Value.Clone();
+
+        return result;
+    }
+
     private class OllamaResult
     {
         public required string Response { get; set; }
